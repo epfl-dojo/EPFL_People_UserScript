@@ -25,7 +25,9 @@ $(document).ready(function()
   $.get("/cgi-bin/people/showcv?id=" + $.epfl_user["sciper"] + "&op=admindata&type=show&lang=en&cvlang=en", function(data){
     $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
     $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
+    $('.presentation').append('Username : ' + $.epfl_user["username"]+'<br />');
   });
+  $('.presentation').append('Sciper : ' + $.epfl_user["sciper"]+'<br />');
   
   // Add user's mailing list in the right column
   var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+$.epfl_user["sciper"];
