@@ -26,31 +26,16 @@ $(document).ready(function()
     $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
     $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
   });
-
-  // http://wiki.greasespot.net/GM_xmlhttpRequest
-  // Note that for cross-domain request GM_xmlhttpRequest needs grant
-  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper=' + sciper;
-  GM_xmlhttpRequest({
-    method: "GET",
-    url: cadiURL,
-    onload: function(response) {
-      alert(response.responseText);
-      html = $.parseHTML(response.responseText);
-      mailinglistUL = $(html).find("ul");
-      $('#footer').before(mailinglistUL);
-    }
-  });
   
-  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+sciper;
-  console.log(cadiURL);
+  // Add user's mailing list in the right column
+  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+$.epfl_user["sciper"];
   GM_xmlhttpRequest({
     method: "GET",
     url: cadiURL,
     onload: function(response) {
       html = $.parseHTML( response.responseText );
       mailinglistUL = $(html).contents('ul');
-      console.log(mailinglistUL);
-      $('.right-col').append('<div id="cadiMLdiv"><h4>Mailing List</h4><ul id="cadiML">test</ul></div>');
+      $('.right-col').append('<h4>Mailing List</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
       $('#cadiML').html(mailinglistUL);
     }
   });
