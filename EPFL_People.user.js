@@ -3,7 +3,7 @@
 // @namespace   none
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
-// @version     1
+// @version     1.0.3
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
