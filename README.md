@@ -11,6 +11,8 @@ Show the sciper number in the title
 
 ### Improvement #2
 Show the mailing lists that the user belong to
+![Improvement #2](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-2.png)
+
 
 
 Installation

@@ -33,6 +33,21 @@ $(document).ready(function() {
     }
   });
   
+  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+sciper;
+  console.log(cadiURL);
+  GM_xmlhttpRequest({
+    method: "GET",
+    url: cadiURL,
+    onload: function(response) {
+      html = $.parseHTML( response.responseText );
+      mailinglistUL = $(html).contents('ul');
+      console.log(mailinglistUL);
+      $('.right-col').append('<div id="cadiMLdiv"><h4>Mailing List</h4><ul id="cadiML">test</ul></div>');
+      $('#cadiML').html(mailinglistUL);
+    }
+  });
+  GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
+  
   // var adminDataURL = "http://people.epfl.ch/cgi-bin/people?id="+sciper+"&op=admindata&lang=en&cvlang=en";
   /* Idea => add accred link
     <div class="button accred">
