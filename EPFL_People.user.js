@@ -4,7 +4,8 @@
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
 // @version     1
-// @grant       none
+// @grant       GM_xmlhttpRequest
+// @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @author      EPFL-dojo
 // ==/UserScript==
@@ -24,5 +25,43 @@ $(document).ready(function()
   $.get("/cgi-bin/people/showcv?id=" + $.epfl_user["sciper"] + "&op=admindata&type=show&lang=en&cvlang=en", function(data){
     $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
     $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
-  })
+  });
+
+  // http://wiki.greasespot.net/GM_xmlhttpRequest
+  // Note that for cross-domain request GM_xmlhttpRequest needs grant
+  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper=' + sciper;
+  GM_xmlhttpRequest({
+    method: "GET",
+    url: cadiURL,
+    onload: function(response) {
+      alert(response.responseText);
+      html = $.parseHTML(response.responseText);
+      mailinglistUL = $(html).find("ul");
+      $('#footer').before(mailinglistUL);
+    }
+  });
+  
+  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+sciper;
+  console.log(cadiURL);
+  GM_xmlhttpRequest({
+    method: "GET",
+    url: cadiURL,
+    onload: function(response) {
+      html = $.parseHTML( response.responseText );
+      mailinglistUL = $(html).contents('ul');
+      console.log(mailinglistUL);
+      $('.right-col').append('<div id="cadiMLdiv"><h4>Mailing List</h4><ul id="cadiML">test</ul></div>');
+      $('#cadiML').html(mailinglistUL);
+    }
+  });
+  GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
+  
+  // var adminDataURL = "http://people.epfl.ch/cgi-bin/people?id="+sciper+"&op=admindata&lang=en&cvlang=en";
+  /* Idea => add accred link
+    <div class="button accred">
+    <a href="http://accred.epfl.ch/accred/accreds.pl/userinfo?thescip=136597">
+      <button class="icon"></button>
+      <span class="label"> Accreditations of Jean-Claude&nbsp;De Giorgi (fr)</span>
+    </a>
+  </div>*/
 });
