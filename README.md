@@ -9,9 +9,9 @@ Improvement
 Show the sciper number in the title
 ![Improvement #1](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-1.png)
 
-### Improvement #2
+### Improvement #3
 Show the mailing lists that the user belong to
-![Improvement #2](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-2.png)
+![Improvement #3](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-2.png)
 
 
 
