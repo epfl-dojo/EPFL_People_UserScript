@@ -8,12 +8,13 @@ Improvement
 ### Improvement #1
 Show the username and the sciper number in the title
 
-![Improvement #1](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-2.png)
+![Improvement #1](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-1.png)
+![Improvement #1b](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-1b.png)
 
 ### Improvement #2
 Show the mailing lists that the user belong to
 
-![Improvement #3](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-3.png)
+![Improvement #3](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-2.png)
 
 
 
