@@ -2,13 +2,19 @@
 A Greasemonkey/Tampermonkey script to improve browsing on people.epfl.ch
 
 
-## Improvement
+Improvement
+-----------
 
-### Improvement #1 - Show the sciper number in the title
+### Improvement #1
+Show the sciper number in the title
 ![Improvement #1](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/img/improvement-1.png)
 
+### Improvement #2
+Show the mailing lists that the user belong to
 
-## Installation
+
+Installation
+------------
 
 1. Install the Firefox add-on [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) or [Tampermonkey](http://tampermonkey.net/) for Chrome.
 1. Open the RAW content of [EPFL_People.user.js](https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js)
