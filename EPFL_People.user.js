@@ -16,6 +16,93 @@
 this.$ = this.jQuery = jQuery.noConflict(true);
 $(document).ready(function()
 {
+
+  // Multiline Function String - Nate Ferrero - Public Domain
+  // http://stackoverflow.com/questions/4376431/javascript-heredoc
+  function hereDoc (f) {
+      return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1];
+  };
+  var EPFLplanLoader = hereDoc(function(){/*
+  <script>
+    var extbaseloaded = false;
+    var extloaded = false;
+    var epflloaded = false;
+
+    var head= document.getElementsByTagName('head')[0];
+
+    var loadext = function() {
+        var script= document.createElement('script');
+        script.type= 'text/javascript';
+        script.onload = function() {
+          extloaded = true;
+          loadepfl();
+        };
+        script.onreadystatechange = function () {
+            if (this.readyState == 'loaded' && !extloaded) {
+                loadepfl();
+            }
+        };
+        head.appendChild(script);
+        script.src= 'http://plan.epfl.ch/mfbase/ext/ext-all.js';
+    };
+
+    var loadepfl = function() {
+        var script= document.createElement('script');
+        script.type= 'text/javascript';
+        script.onload = function() {
+          epflloaded = true;
+          initEpflApi();
+        };
+        script.onreadystatechange = function () {
+            if (this.readyState == 'loaded' && !epflloaded) {
+                initEpflApi();
+            }
+        };
+        head.appendChild(script);
+        script.src= 'http://plan.epfl.ch/build/epfl.js?uuid=1602050647';
+    };
+
+    var script= document.createElement('script');
+    script.type= 'text/javascript';
+    script.onload = function() {
+      extbaseloaded = true;
+      loadext();
+    };
+    script.onreadystatechange = function () {
+        if (this.readyState == 'loaded' && !extbaseloaded) {
+            loadext();
+        }
+    };
+    head.appendChild(script);
+    script.src= 'http://plan.epfl.ch/mfbase/ext/adapter/ext/ext-base.js';
+  </script>
+*/});
+  var MyMAP = hereDoc(function(){/*
+  <script type="text/javascript">
+  var initEpflApi = function() {
+      epfl4 = new epfl.API();
+      epfl4.createMap({
+          layers: [],
+          div: 'mymap4'
+      });
+      epfl4.search('ME A2 424');
+  };
+  </script>
+  <div id="mymap4" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+*/});
+  $("body").prepend(EPFLplanLoader);
+  $(".unit_popup").prepend(MyMAP);
+
+  /*var script = document.createElement('script');
+  script.src = "http://plan.epfl.ch/mfbase/ext/ext-all.js";
+  document.body.appendChild(script);
+  let script2 = document.createElement('script');
+  script2.src = "http://plan.epfl.ch/mfbase/ext/adapter/ext/ext-base.js";
+  document.body.appendChild(script2);
+  let script3 = document.createElement('script');
+  script3.src = "http://plan.epfl.ch/build/epfl.js?uuid=1602050645";
+  document.body.appendChild(script3); */
+
   // get the h1 name content
   $.epfl_user = {
       "name": $("h1").text(),
@@ -30,7 +117,7 @@ $(document).ready(function()
     $('.presentation').append('Username : ' + $.epfl_user["username"]+'<br />');
   });
   $('.presentation').append('Sciper : ' + $.epfl_user["sciper"]+'<br />');
-  
+
   // Add user's mailing list in the right column
   var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+$.epfl_user["sciper"];
   GM_xmlhttpRequest({
@@ -44,7 +131,7 @@ $(document).ready(function()
     }
   });
   GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
-  
+
   // var adminDataURL = "http://people.epfl.ch/cgi-bin/people?id="+sciper+"&op=admindata&lang=en&cvlang=en";
   /* Idea => add accred link
     <div class="button accred">
