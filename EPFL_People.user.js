@@ -14,6 +14,16 @@
 
 //Avoid conflicts
 this.$ = this.jQuery = jQuery.noConflict(true);
+
+
+var initEpflApi = function() {
+    epfl4 = new epfl.API();
+    epfl4.createMap({
+        layers: [],
+        div: 'mymap4'
+    });
+    epfl4.search('ME A2 424');
+};
 $(document).ready(function()
 {
 
@@ -22,77 +32,73 @@ $(document).ready(function()
   function hereDoc (f) {
       return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1];
   };
-  var EPFLplanLoader = hereDoc(function(){/*
-  <script>
-    var extbaseloaded = false;
-    var extloaded = false;
-    var epflloaded = false;
+  $(".unit_popup").prepend('<div id="mymap4" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>');
 
-    var head= document.getElementsByTagName('head')[0];
 
-    var loadext = function() {
-        var script= document.createElement('script');
-        script.type= 'text/javascript';
-        script.onload = function() {
-          extloaded = true;
-          loadepfl();
-        };
-        script.onreadystatechange = function () {
-            if (this.readyState == 'loaded' && !extloaded) {
-                loadepfl();
-            }
-        };
-        head.appendChild(script);
-        script.src= 'http://plan.epfl.ch/mfbase/ext/ext-all.js';
-    };
+  var extbaseloaded = false;
+  var extloaded = false;
+  var epflloaded = false;
 
-    var loadepfl = function() {
-        var script= document.createElement('script');
-        script.type= 'text/javascript';
-        script.onload = function() {
-          epflloaded = true;
-          initEpflApi();
-        };
-        script.onreadystatechange = function () {
-            if (this.readyState == 'loaded' && !epflloaded) {
-                initEpflApi();
-            }
-        };
-        head.appendChild(script);
-        script.src= 'http://plan.epfl.ch/build/epfl.js?uuid=1602050647';
-    };
+  var head= document.getElementsByTagName('head')[0];
 
-    var script= document.createElement('script');
-    script.type= 'text/javascript';
-    script.onload = function() {
-      extbaseloaded = true;
-      loadext();
-    };
-    script.onreadystatechange = function () {
-        if (this.readyState == 'loaded' && !extbaseloaded) {
-            loadext();
-        }
-    };
-    head.appendChild(script);
-    script.src= 'http://plan.epfl.ch/mfbase/ext/adapter/ext/ext-base.js';
-  </script>
-*/});
-  var MyMAP = hereDoc(function(){/*
-  <script type="text/javascript">
-  var initEpflApi = function() {
+  var loadext = function() {
+      var script= document.createElement('script');
+      script.type= 'text/javascript';
+      script.onload = function() {
+        extloaded = true;
+        loadepfl();
+      };
+      script.onreadystatechange = function () {
+          if (this.readyState == 'loaded' && !extloaded) {
+              loadepfl();
+          }
+      };
+      head.appendChild(script);
+      script.src= 'http://plan.epfl.ch/mfbase/ext/ext-all.js';
+  };
+
+  var loadepfl = function() {
+      var script= document.createElement('script');
+      script.type= 'text/javascript';
+      script.onload = function() {
+        epflloaded = true;
+        initEpflApi();
+      };
+      script.onreadystatechange = function () {
+          if (this.readyState == 'loaded' && !epflloaded) {
+              initEpflApi();
+          }
+      };
+      head.appendChild(script);
+      script.src= 'http://plan.epfl.ch/build/epfl.js?uuid=1602050647';
+  };
+
+  var script= document.createElement('script');
+  script.type= 'text/javascript';
+  script.onload = function() {
+    extbaseloaded = true;
+    loadext();
+  };
+  script.onreadystatechange = function () {
+      if (this.readyState == 'loaded' && !extbaseloaded) {
+          loadext();
+      }
+  };
+  head.appendChild(script);
+  script.src= 'http://plan.epfl.ch/mfbase/ext/adapter/ext/ext-base.js';
+
+
+
+
+  //$("body").prepend(EPFLplanLoader);
+  /*var initEpflApi = function() {
       epfl4 = new epfl.API();
       epfl4.createMap({
           layers: [],
           div: 'mymap4'
       });
       epfl4.search('ME A2 424');
-  };
-  </script>
-  <div id="mymap4" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
-*/});
-  $("body").prepend(EPFLplanLoader);
-  $(".unit_popup").prepend(MyMAP);
-
+  };*/
   /*var script = document.createElement('script');
   script.src = "http://plan.epfl.ch/mfbase/ext/ext-all.js";
   document.body.appendChild(script);
