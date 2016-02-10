@@ -3,7 +3,7 @@
 // @namespace   none
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
-// @version     1.0.5
+// @version     1.0.7
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -40,12 +40,16 @@ $(document).ready(function()
       html = $.parseHTML( response.responseText );
       // Mailing list emails
       mailinglistUL = $(html).contents('ul').not(':last');
-      $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
-      $('#cadiML').html(mailinglistUL);
+      if (0 < mailinglistUL.length) {
+        $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
+        $('#cadiML').html(mailinglistUL);
+      }
       // Group list emails
       grouplistUL = $(html).contents('ul').last();
-      $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">test</ul></div>');
-      $('#cadiGL').html(grouplistUL);
+      if (0 < grouplistUL.length) {
+        $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">test</ul></div>');
+        $('#cadiGL').html(grouplistUL);
+      }
     }
   });
   GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
