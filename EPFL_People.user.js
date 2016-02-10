@@ -38,12 +38,18 @@ $(document).ready(function()
     url: cadiURL,
     onload: function(response) {
       html = $.parseHTML( response.responseText );
-      mailinglistUL = $(html).contents('ul');
-      $('.right-col').append('<h4>Mailing List</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
+      // Mailing list emails
+      mailinglistUL = $(html).contents('ul').not(':last');
+      $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
       $('#cadiML').html(mailinglistUL);
+      // Group list emails
+      grouplistUL = $(html).contents('ul').last();
+      $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">test</ul></div>');
+      $('#cadiGL').html(grouplistUL);
     }
   });
   GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
+  GM_addStyle("#cadiGLdiv{ padding-left: 20px; } #cadiGL ul ul { margin-left: 10px; }" );
   
   // var adminDataURL = "http://people.epfl.ch/cgi-bin/people?id="+sciper+"&op=admindata&lang=en&cvlang=en";
   /* Idea => add accred link
