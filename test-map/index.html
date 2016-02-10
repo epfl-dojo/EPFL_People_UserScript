@@ -1,0 +1,336 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EPFL mode API</title>
+
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/xtheme-gray.css"/>
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/epflApi/css/api.css"/>
+<script type="text/javascript" src="./apiloader.js"></script>
+<script type="text/javascript" src="http://plan.epfl.ch/mfbase/ext/ext-all.js"></script>
+<script type="text/javascript" src="http://plan.epfl.ch/mfbase/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="http://plan.epfl.ch/build/epfl.js?uuid=1602050645"></script>
+    <style>
+        body {
+            font-family: arial;
+            font-size: 0.9em;
+            padding: 10px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        pre {
+            border: 1px solid #ccc;
+            background-color: #eee;
+            font-family: arial;
+            font-size: 0.8em;
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            font-weight: bold;
+            padding-top: 20px;
+        }
+
+        table {
+            width: 100%
+        }
+
+    </style>
+  </head>
+
+  <body>
+<h1>Page de démonstration d'utilisation de l'API EPFL</h1>
+
+<table>
+
+<tr>
+  <th colspan="2">Inclusion des fichiers JS et CSS de l'API EPFL</th>
+</tr>
+<tr>
+  <td colspan="2">
+<pre>
+&lt;link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/ext-all.css"/&gt;
+&lt;link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/xtheme-gray.css"/&gt;
+&lt;link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/epflApi/css/api.css"/&gt;
+
+&lt;script type="text/javascript" src="http://plan.epfl.ch/extapi/apiloader.js"&gt;&lt;/script&gt;
+</pre>
+<p style="color:red;">Le fichier JS doit être inclus si possible juste avant la balise &lt;/body&gt; à la <b>fin</b> du code HTML de la page.<br />
+Dans tous les cas, il doit <b>absolument</b> être placé <b>après</b> la définition de la carte (<i>var initEpflApi = ...</i>)</p>
+  </td>
+</tr>
+<tr>
+  <th colspan="2">Création d'une carte simple</th>
+</tr>
+<tr>
+  <td>
+<div id="mymap1" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+  </td>
+  <td>
+<pre>
+var initEpflApi = function() {
+    epfl1 = new epfl.API({lang: 'fr'});
+    epfl1.createMap({
+        div: 'mymap1',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        layers: ['auditoires', 'restauration']
+    });
+};
+</pre>
+  </td>
+</tr>
+<tr>
+  <th colspan="2">Création d'une carte avec un arbre des couches</th>
+</tr>
+<tr>
+  <td>
+<div id="mymap2" style="width:400px;height:400px;border:1px solid grey;float:left;margin:10px !important;"></div>
+<div id="mytree2" style="width:220px;height:auto;float:right;margin:10px !important;"></div>
+  </td>
+  <td>
+<pre>
+var initEpflApi = function() {
+    epfl2 = new epfl.API({lang: 'fr'});
+    epfl2.createMap({
+        div: 'mymap2',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        floor: 2,
+        showZoomPanBar: true
+    });
+    epfl2.createLayerTree({
+        div: 'mytree2',
+        layers: ['batiments', 'auditoires', 'restauration']
+    });
+};
+</pre>
+  </td>
+</tr>
+
+<tr>
+  <th colspan="2">Affichage d'une punaise et d'un popup sur la carte</th>
+</tr>
+<tr>
+  <td>
+<div id="mymap3" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+<div id="mytree3" style="width:200px;height:auto;float:right;margin:10px !important;"></div>
+  </td>
+  <td>
+<pre>
+var initEpflApi = function() {
+    epfl3 = new epfl.API({lang: 'en'});
+    epfl3.createMap({
+        div: 'mymap3',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 17,
+        floor: 2,
+        showZoomPanBar: true,
+        layers: ['auditoires']
+    });
+    epfl3.showMarker({
+        easting: 731050,
+        northing: 5864090,
+        html: 'Contenu du popup affiché quand on clique sur la punaise'
+    });
+    epfl3.showPopup({
+        easting: 730850,
+        northing: 5863950,
+        title: 'Le titre du popup',
+        html: 'Contenu du popup'
+    });
+};
+</pre>
+  </td>
+</tr>
+<tr>
+  <th colspan="2">Affichage de résultats de recherche</th>
+</tr>
+<tr>
+  <td>
+<div id="mymap4" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+  </td>
+  <td>
+  <pre>
+var initEpflApi = function() {
+    epfl4 = new epfl.API();
+    epfl4.createMap({
+        layers: [],
+        div: 'mymap4'
+    });
+    epfl4.search('pierre mellier');
+};
+</pre>
+  </td>
+</tr>
+<tr>
+  <th colspan="2">Balelec</th>
+</tr>
+<tr>
+  <td>
+<div id="mymap5" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+  </td>
+  <td>
+  <pre>
+var initEpflApi = function() {
+    epfl5 = new epfl.API({lang: 'fr'});
+    epfl5.createMap({
+        div: 'mymap5',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        layers: ['events_surface', 'events_line', 'events_label', 'evenements_scenes', 'evenements_nourriture', 'evenements_boissons', 'evenements_entrees', 'evenements_informations', 'evenements_presse', 'evenements_infirmerie']
+    });
+};
+</pre>
+  </td>
+</tr>
+</table>
+
+<!-- debug -->
+<!--
+<style type="text/css">.olTileImage {border: 1px solid lime;}</style>
+
+<script type="text/javascript" src="../mfbase/ext/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../mfbase/ext/ext-all-debug.js"></script>
+
+<script type="text/javascript" src="../mfbase/openlayers/lib/OpenLayers.js"></script>
+<script type="text/javascript" src="../mfbase/geoext/lib/GeoExt.js"></script>
+<script type="text/javascript" src="../mfbase/geoext/lib/GeoExt/widgets/tips/SliderTip.js"></script>
+<script type="text/javascript" src="../mfbase/mapfish/MapFish.js"></script>
+
+<script type="text/javascript" src="../epflApi/js/config.js"></script>
+<script type="text/javascript" src="../epflApi/js/firefoxfix.js"></script>
+<script type="text/javascript" src="../epflApi/js/ie9fix.js"></script>
+
+<script src="../mfbase/openlayers/lib/OpenLayers/Lang/fr.js" type="text/javascript"></script>
+<script src="../mfbase/mapfish/lang/fr.js" type="text/javascript"></script>
+<script src="../mfbase/ext/source/locale/ext-lang-fr.js" type="text/javascript"></script>
+<script type="text/javascript" src="../epflApi/js/lang/fr.js"></script>
+
+<script type="text/javascript" src="../MapFishApi/js/mapfish_api.js"></script>
+<script type="text/javascript" src="../MapFishApi/js/Measure.js"></script>
+<script type="text/javascript" src="../MapFishApi/js/Search.js"></script>
+<script type="text/javascript" src="../MapFishApi/js/ZoomToExtent.js"></script>
+<script type="text/javascript" src="../MapFishApi/js/Permalink.js"></script>
+<script type="text/javascript" src="../MapFishApi/js/ArgParser.js"></script>
+
+<script type="text/javascript" src="../epflApi/js/widgets/FloorSlider.js"></script>
+<script type="text/javascript" src="../epflApi/js/widgets/OpacitySlider.js"></script>
+<script type="text/javascript" src="../epflApi/js/widgets/ZoomSlider.js"></script>
+<script type="text/javascript" src="../epflApi/js/layer/SwitchableWMS.js"></script>
+<script type="text/javascript" src="../epflApi/js/layer/SwitchableTileCache.js"></script>
+<script type="text/javascript" src="../epflApi/js/layer/OSM.js"></script>
+<script type="text/javascript" src="../epflApi/js/epfl_api.js"></script>
+<script type="text/javascript" src="../epflApi/js/Search.js"></script>
+<script type="text/javascript" src="../epflApi/js/Permalink.js"></script>
+<script type="text/javascript" src="../epflApi/js/ArgParser.js"></script>
+<script type="text/javascript" src="../epflApi/js/projectionSwitcher.js"></script>
+<script type="text/javascript" src="../epflApi/js/jsonp.js"></script>
+
+<script type="text/javascript">
+Ext.onReady(function(){
+    initEpflApi();
+});
+</script>
+-->
+<!-- debug -->
+
+<script type="text/javascript">
+
+var initEpflApi = function() {
+
+    epfl1 = new epfl.API({lang: 'fr'});
+    epfl1.createMap({
+        div: 'mymap1',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        layers: ['auditoires', 'restauration']
+    });
+
+    epfl2 = new epfl.API({lang: 'fr'});
+    epfl2.createMap({
+        div: 'mymap2',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        floor: 2,
+        showZoomPanBar: true
+    });
+    epfl2.createLayerTree({
+        div: 'mytree2',
+        layers: ['batiments', 'auditoires', 'restauration']
+    });
+
+    epfl3 = new epfl.API({lang: 'en'});
+    epfl3.createMap({
+        div: 'mymap3',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 17,
+        floor: 2,
+        showZoomPanBar: true,
+        layers: ['auditoires']
+    });
+    epfl3.showMarker({
+        easting: 731050,
+        northing: 5864090,
+        html: 'Contenu du popup affiché quand on clique sur la punaise'
+    });
+    epfl3.showPopup({
+        easting: 730850,
+        northing: 5863950,
+        title: 'Le titre du popup',
+        html: 'Contenu du popup'
+    });
+
+    epfl4 = new epfl.API();
+    epfl4.createMap({
+        layers: [],
+        div: 'mymap4'
+    });
+    epfl4.search('pierre mellier');
+
+    epfl5 = new epfl.API({lang: 'fr'});
+    epfl5.createMap({
+        div: 'mymap5',
+        easting: 731000,
+        northing: 5864000,
+        zoom: 16,
+        layers: ['events_surface', 'events_line', 'events_label', 'evenements_scenes', 'evenements_nourriture', 'evenements_boissons', 'evenements_entrees', 'evenements_informations', 'evenements_presse', 'evenements_infirmerie']
+    });
+
+};
+</script>
+
+<!-- prod -->
+<script type="text/javascript" src="http://plan.epfl.ch/extapi/apiloader.js"></script>
+<!-- prod -->
+
+    </body>
+</html>

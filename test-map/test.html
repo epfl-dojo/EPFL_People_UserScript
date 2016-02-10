@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>EPFL mode API</title>
+
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/ext-all.css"/>
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/mfbase/ext/resources/css/xtheme-gray.css"/>
+    <link rel="stylesheet" type="text/css" href="http://plan.epfl.ch/epflApi/css/api.css"/>
+
+  </head>
+
+  <body>
+<h1>Page de démonstration d'utilisation de l'API EPFL</h1>
+
+<div id="mymap4" style="width:500px;height:300px;border:1px solid grey;float:left;margin:10px !important;"></div>
+
+
+<pre>
+  var initEpflApi = function() {
+      epfl4 = new epfl.API();
+      epfl4.createMap({
+          layers: [],
+          div: 'mymap4'
+      });
+      //epfl4.search('pierre mellier');
+      epfl4.search('ME A2 424');
+  };
+</pre>
+
+<script type="text/javascript">
+
+var initEpflApi = function() {
+
+
+
+    epfl4 = new epfl.API();
+    epfl4.createMap({
+        layers: [],
+        div: 'mymap4'
+    });
+    epfl4.search('ME A2 424');
+
+
+
+};
+</script>
+
+<!-- prod -->
+
+<!--<script type="text/javascript" src="http://plan.epfl.ch/extapi/apiloader.js"></script>-->
+<!-- prod -->
+<script type="text/javascript" src="./apiloader.js"></script>
+
+    </body>
+</html>
