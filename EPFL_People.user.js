@@ -3,6 +3,7 @@
 // @namespace   none
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
+// @include     https://people.epfl.ch/*
 // @version     1.0.7
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
