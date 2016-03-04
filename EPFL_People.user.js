@@ -4,7 +4,7 @@
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
 // @include     https://people.epfl.ch/*
-// @version     1.0.7
+// @version     1.0.8
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
