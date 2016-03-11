@@ -20,7 +20,7 @@ $(document).ready(function()
   // get the h1 name content
   $.epfl_user = {
       "name": $("h1").text(),
-      "sciper": $('a[href*="http://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
+      "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
   };
   // change the main title content to add the sciper in it
   $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
