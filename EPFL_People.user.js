@@ -4,24 +4,30 @@
 // @description A script to improve browsing on people.epfl.ch
 // @include     http://people.epfl.ch/*
 // @include     https://people.epfl.ch/*
-// @version     1.0.9
+// @version     1.1
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @author      EPFL-dojo
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
-// @updateURL   https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
 // ==/UserScript==
 
 //Avoid conflicts
 this.$ = this.jQuery = jQuery.noConflict(true);
-$(document).ready(function()
-{
+$(document).ready(function() {
+  function absURL(url, needle, replacement) {
+    return url.replace(needle, replacement);
+  }
+  
   // get the h1 name content
   $.epfl_user = {
-      "name": $("h1").text(),
-      "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
+    "name": $("h1").text(),
+    "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
   };
+  $.epfl_user.units = $('a[href*="http://plan.epfl.ch/?room="]').map(function() {
+    return this.text;
+  }).toArray();
+
   // change the main title content to add the sciper in it
   $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
 
@@ -42,26 +48,27 @@ $(document).ready(function()
       // Mailing list emails
       mailinglistUL = $(html).contents('ul').not(':last');
       if (0 < mailinglistUL.length) {
-        $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">test</ul></div>');
+        $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">cadiML</ul></div>');
         $('#cadiML').html(mailinglistUL);
+        // replace cadi's relative URL with absolute URL
+        $('#cadiML a').each(function(){
+          //this.href = this.href.replace(window.location.origin, 'http://cadiwww.epfl.ch');
+          this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
+        });
       }
       // Group list emails
       grouplistUL = $(html).contents('ul').last();
       if (0 < grouplistUL.length) {
-        $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">test</ul></div>');
+        $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">cadiGL</ul></div>');
         $('#cadiGL').html(grouplistUL);
+        // replace cadi's relative URL with absolute URL
+        $('#cadiGL a').each(function(){
+          //this.href = this.href.replace(window.location.origin, 'http://cadiwww.epfl.ch');
+          this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
+        });
       }
     }
   });
   GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
   GM_addStyle("#cadiGLdiv{ padding-left: 20px; } #cadiGL ul ul { margin-left: 10px; }" );
-  
-  // var adminDataURL = "http://people.epfl.ch/cgi-bin/people?id="+sciper+"&op=admindata&lang=en&cvlang=en";
-  /* Idea => add accred link
-    <div class="button accred">
-    <a href="http://accred.epfl.ch/accred/accreds.pl/userinfo?thescip=136597">
-      <button class="icon"></button>
-      <span class="label"> Accreditations of Jean-Claude&nbsp;De Giorgi (fr)</span>
-    </a>
-  </div>*/
 });
