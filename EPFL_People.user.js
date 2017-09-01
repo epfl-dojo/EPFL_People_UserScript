@@ -2,9 +2,9 @@
 // @name        EPFL People
 // @namespace   none
 // @description A script to improve browsing on people.epfl.ch
-// @include     http://people.epfl.ch/*
 // @include     https://people.epfl.ch/*
-// @version     1.1
+// @include     https://personnes.epfl.ch/*
+// @version     1.3
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
@@ -24,13 +24,28 @@ $(document).ready(function() {
     "name": $("h1").text(),
     "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
   };
-  $.epfl_user.units = $('a[href*="http://plan.epfl.ch/?room="]').map(function() {
+  
+  $.epfl_user.rooms = $('a[href*="http://plan.epfl.ch/?room="]').map(function() {
     return this.text;
   }).toArray();
+  
+  $('span.unit-name').each(function(){
+    var that = $(this);
+    var unitName = that.parent().find('a').last().text();
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: "https://search.epfl.ch/ubrowse.action?acro=" + unitName,
+      onload: function(response) {
+        var html = $.parseHTML( response.responseText );
+        var unitHref = $(html).find('a[href*="http://infowww.epfl.ch/imon-public/OrgUnites.detail?ww_i_unite="]').attr('href');
+        var unitId = unitHref.match(/ww_i_unite=([0-9]{4,6})/)[1];
+        that.parent().parent().parent().append("(<a href='" + unitHref + "'>#" + unitId + "</a>)");
+      }
+    });
+  });
 
   // change the main title content to add the sciper in it
   $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
-
   $.get("/cgi-bin/people/showcv?id=" + $.epfl_user["sciper"] + "&op=admindata&type=show&lang=en&cvlang=en", function(data){
     $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
     $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
@@ -52,7 +67,6 @@ $(document).ready(function() {
         $('#cadiML').html(mailinglistUL);
         // replace cadi's relative URL with absolute URL
         $('#cadiML a').each(function(){
-          //this.href = this.href.replace(window.location.origin, 'http://cadiwww.epfl.ch');
           this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
         });
       }
@@ -63,7 +77,6 @@ $(document).ready(function() {
         $('#cadiGL').html(grouplistUL);
         // replace cadi's relative URL with absolute URL
         $('#cadiGL a').each(function(){
-          //this.href = this.href.replace(window.location.origin, 'http://cadiwww.epfl.ch');
           this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
         });
       }
