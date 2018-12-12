@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        EPFL People
 // @namespace   none
-// @version     1.3.3
+// @version     1.3.4
 // @author      EPFL-dojo
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
@@ -26,11 +26,15 @@
 //Avoid conflicts
 this.$ = this.jQuery = jQuery.noConflict(true);
 $(document).ready(function() {
-  function absURL(url, needle, replacement) {
-    return url.replace(needle, replacement);
-  }
   
-  // get the h1 name content
+  console.log("Userscript EPFL People");
+
+  /**
+   * FIRST PART: data manipulation with unlogged users
+   **/
+  /**
+   * SECOND PART: data manipulation with logged users
+   **/
   $.epfl_user = {
     "name": $("h1").text(),
     "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
@@ -63,7 +67,11 @@ $(document).ready(function() {
     $('.presentation').append('Username : ' + $.epfl_user["username"]+'<br />');
   });
   $('.presentation').append('Sciper : ' + $.epfl_user["sciper"]+'<br />');
-  
+    
+  function absURL(url, needle, replacement) {
+    return url.replace(needle, replacement);
+  }
+
   // Add user's mailing list in the right column
   var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+$.epfl_user["sciper"];
   GM_xmlhttpRequest({
