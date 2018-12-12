@@ -1,15 +1,18 @@
 // ==UserScript==
 // @name        EPFL People
 // @namespace   none
+// @version     1.3.1
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
-// @version     1.3
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @author      EPFL-dojo
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
+// @icon        https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
+// @iconURL     https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
+// @defaulticon https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
 // ==/UserScript==
 
 //Avoid conflicts
