@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        EPFL People
 // @namespace   none
-// @version     1.3.5
+// @version     1.3.6
 // @author      EPFL-dojo
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
@@ -52,15 +52,19 @@ $(document).ready(function() {
   /**
    * SECOND PART: data manipulation with logged users
    **/
-  $.epfl_user = {
-    "name": $("h1").text(),
-    "sciper": $('a[href*="https://people.epfl.ch/cgi-bin/people?id="]').attr('href').match(/id=([0-9]{6})/)[1]
-  };
   
-  $.epfl_user.rooms = $('a[href*="http://plan.epfl.ch/?room="]').map(function() {
+  // get user info (this means that you have to be logged in)
+  $.epfl_user = {
+    "name": $(".main-container h1").text(),
+    "username": $('dt:contains("Username"):last').next().text(),
+    "sciper": $('dt:contains("SCIPER Number"):last').next().text(),
+    "shell": $('dt:contains("Shell"):last').next().text()
+  };
+
+  $.epfl_user.rooms = $('a[href*="https://plan.epfl.ch?room="]').map(function() {
     return this.text;
   }).toArray();
-  
+
   $('span.unit-name').each(function(){
     var that = $(this);
     var unitName = that.parent().find('a').last().text();
@@ -77,10 +81,10 @@ $(document).ready(function() {
   });
 
   // change the main title content to add the sciper in it
-  $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
+  $(".main-container h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
   $.get("/cgi-bin/people/showcv?id=" + $.epfl_user["sciper"] + "&op=admindata&type=show&lang=en&cvlang=en", function(data){
     $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
-    $("h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
+    $(".main-container h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
     $('.presentation').append('Username : ' + $.epfl_user["username"]+'<br />');
   });
   $('.presentation').append('Sciper : ' + $.epfl_user["sciper"]+'<br />');
@@ -120,4 +124,5 @@ $(document).ready(function() {
   });
   GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
   GM_addStyle("#cadiGLdiv{ padding-left: 20px; } #cadiGL ul ul { margin-left: 10px; }" );
+  
 });
