@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        EPFL People
 // @namespace   none
-// @version     1.3.2
+// @version     1.3.3
 // @author      EPFL-dojo
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
@@ -9,6 +9,8 @@
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
+// @connect     self
+// @run-at      document-end
 // @homepage    https://github.com/ponsfrilus/EPFL_People_UserScript/
 // @homepageURL https://github.com/ponsfrilus/EPFL_People_UserScript/
 // @hwebsite    https://github.com/ponsfrilus/EPFL_People_UserScript/
