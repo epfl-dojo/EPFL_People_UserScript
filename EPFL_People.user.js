@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        EPFL People
 // @namespace   none
-// @version     1.3.4
+// @version     1.3.5
 // @author      EPFL-dojo
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
@@ -32,6 +32,23 @@ $(document).ready(function() {
   /**
    * FIRST PART: data manipulation with unlogged users
    **/
+  
+  // Add link for everry part of the unit path
+  // TODO:  add "title" attribute with the full unit name
+  // DEBUG: console.log($('*[itemprop="location"] > *[itemprop="name"]').text());
+  $('*[itemprop="location"] > *[itemprop="name"]').each(function(i, c){
+    var unitPath = '';
+    $(this).text().split(" ").forEach(function(el){
+      if (el) {
+        unitPath = unitPath + '<a href="https://search.epfl.ch/?filter=unit&q=' + el + '">' + el + '</a> ';
+      }
+    });
+    $(this).html(unitPath); // setting text
+  });
+  
+  // TODO:  Make the email selectable
+
+  
   /**
    * SECOND PART: data manipulation with logged users
    **/
