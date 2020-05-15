@@ -15,5 +15,5 @@
 //Avoid conflicts
 
 $(document).ready(function () {
-  console.log("ready!");
+  console.log($("html").html());
 });
