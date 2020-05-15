@@ -4,7 +4,7 @@
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
-// @version     1.3
+// @version     1.4
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
@@ -15,5 +15,6 @@
 //Avoid conflicts
 
 $(document).ready(function () {
-  console.log($("html").html());
+  let sciper = ($("html").html().match("/sciper=/"))
+  console.log(sciper)
 });
