@@ -4,7 +4,7 @@
 // @description A script to improve browsing on people.epfl.ch
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
-// @version     1.3.1
+// @version     1.3.2
 // @grant       GM_xmlhttpRequest
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
@@ -14,7 +14,7 @@
 
 // TODO: [ ] ask people to Tequila login if not
 // TODO: [ ] improve the sciper query if people are logged in
-// TODO: [ ] get the username
+// TODO: [x] get the username
 // TODO: [ ] get the groups
 // TODO: [ ] get the mailinglist
 // TODO: [ ] add proper meta data on the phone number
@@ -27,17 +27,28 @@ $(document).ready(function () {
       var sciper = ($("html").html().match(re)[1])
       console.log(sciper)
     } catch (e) {
-      // Exit the script if sciper not found
       throw new Error("No sciper found")
     }
     return sciper
   }
 
-  // Add sciper after name in title
-  $("#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1").append(" #" + getScipterFromOnload())
+  let sciper   = getScipterFromOnload()
+  let username = $('dt:contains("Username")').next('dd').html()
+  let unit     = $('[itemprop="address"] > strong').html()
 
-  // Comfort, open adminstrative data by default
+  // Add sciper after name in title
+  $("#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1").append(" #" + sciper);
+
+  // Comfort, open admindata by default
   $('span:contains("Administrative data")').parent().click()
 
-});
+  // Create a new div to host specific content of this script
+  $(".container:first > div > h1.mr-3").css('margin-bottom','0px')
+  $('<div class="d-flex flex-wrap justify-content-between align-items-baseline" id="EPFLPeopleUserScriptData"></div>').insertAfter(".container:first div:first");
+  $('#EPFLPeopleUserScriptData').css('font-family', 'monospace')
+  $('#EPFLPeopleUserScriptData').css('white-space', 'pre')
+  $('#EPFLPeopleUserScriptData').append('<div>sciper: ' + sciper + '</div>')
+  $('#EPFLPeopleUserScriptData').append('<div>username: ' + username + '</div>')
+  $('#EPFLPeopleUserScriptData').append('<div>unit: ' + unit + '</div>')
 
+});
