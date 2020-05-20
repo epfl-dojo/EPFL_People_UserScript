@@ -12,13 +12,22 @@
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
 // ==/UserScript==
 
-//Avoid conflicts
-
-this.$ = this.jQuery = jQuery.noConflict(true);
-
 $(document).ready(function () {
-  var re = /sciper=([0-9]{6})/;
-  let sciper = ($("html").html().match(re)[1]);
-  $("#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1").append(" #" + sciper);
-  console.log(sciper)
+
+  function getScipterFromOnload() {
+    var re = /sciper=([0-9]{6})/;
+    try {
+      var sciper = ($("html").html().match(re)[1])
+      console.log(sciper)
+    } catch (e) {
+      // Exit the script if sciper not found
+      throw new Error("No sciper found")
+    }
+    return sciper
+  }
+
+  // Add sciper after name in title
+  $("#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1").append(" #" + getScipterFromOnload())
+
 });
+
