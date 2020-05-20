@@ -12,6 +12,13 @@
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
 // ==/UserScript==
 
+// TODO: [ ] ask people to Tequila login if not
+// TODO: [ ] improve the sciper query if people are logged in
+// TODO: [ ] get the username
+// TODO: [ ] get the groups
+// TODO: [ ] get the mailinglist
+// TODO: [ ] add proper meta data on the phone number
+
 $(document).ready(function () {
 
   function getScipterFromOnload() {
