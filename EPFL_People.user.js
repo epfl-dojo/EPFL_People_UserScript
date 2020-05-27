@@ -32,18 +32,18 @@ $(document).ready(function () {
     return sciper
   }
 
-  let sciper   = getScipterFromOnload()
+  let sciper = getScipterFromOnload()
   let username = $('dt:contains("Username")').next('dd').html()
-  let unit     = $('[itemprop="address"] > strong').html()
+  let unit = $('[itemprop="address"] > strong').html()
 
   // Add sciper after name in title
   $("#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1").append(" #" + sciper);
 
   // Comfort, open admindata by default
-  $('span:contains("Administrative data")').parent().click()
+  unsafeWindow.toggleVis('admin-data')
 
   // Create a new div to host specific content of this script
-  $(".container:first > div > h1.mr-3").css('margin-bottom','0px')
+  $(".container:first > div > h1.mr-3").css('margin-bottom', '0px')
   $('<div class="d-flex flex-wrap justify-content-between align-items-baseline" id="EPFLPeopleUserScriptData"></div>').insertAfter(".container:first div:first");
   $('#EPFLPeopleUserScriptData').css('font-family', 'monospace')
   $('#EPFLPeopleUserScriptData').css('white-space', 'pre')
