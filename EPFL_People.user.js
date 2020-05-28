@@ -5,7 +5,7 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.3
+// @version     1.5.4
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
