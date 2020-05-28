@@ -29,12 +29,12 @@ $(document).ready(async () => {
 
   // Async function to get people's data from search-api
   const getPeopleFromSearchAPI = async function (needle) {
-    var people = 'https://search-api.epfl.ch/api/ldap?q=' + needle
+    var searchURL = 'https://search-api.epfl.ch/api/ldap?q=' + encodeURIComponent(needle) + '&showall=0&hl=en&pageSize=all&siteSearch=people.epfl.ch'
     var result = await $.ajax({
       type: 'GET',
-      url: people,
+      url: searchURL,
       async: true,
-      success: function ( data ) {
+      success: function (data) {
         result = data
       }
     })
