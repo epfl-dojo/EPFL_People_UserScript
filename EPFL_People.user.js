@@ -42,7 +42,7 @@ $(document).ready(async () => {
   }
 
   const waitForEl = function (selector, callback) {
-    if (jQuery(selector).length) {
+    if ($(selector).length) {
       callback()
     } else {
       setTimeout(function () {
