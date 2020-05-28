@@ -67,9 +67,8 @@ $(document).ready(async () => {
     })
   }
 
-  // In case we are on https://people.epfl.ch/*
-  // TODO: [ ] handle personnes.epfl.ch too
-  if (document.URL.includes('https://people.epfl.ch/')) {
+  // In case we are on https://people.epfl.ch/* or https://personnes.epfl.ch/*
+  if (document.URL.includes('https://people.epfl.ch/') || document.URL.includes('https://personnes.epfl.ch/')) {
     console.log('Mode: details')
 
     let adminDataLink = $('a:contains("Administrative data"),a:contains("Données administratives")')
