@@ -22,11 +22,6 @@ $(document).ready(async () => {
   console.log("%cPlease visit https://github.com/epfl-dojo/\nand checkout-out EPFL Userscripts here\nhttps://github.com/search?q=topic:epfl-userscript&type=Repositories\n\nFeel free to contribute (https://github.com/epfl-dojo/EPFL_People_UserScript) and add issues or feature request here\nhttps://github.com/epfl-dojo/EPFL_People_UserScript/issues","color:#08ff00;font-weight:bold;"),
   console.log("%c	⊂(◉‿◉)つ","font-size:34px; line-height:1.4em;");
 
-  var TargetLink = $('a:contains("Administrative data")')
-  if (TargetLink.length) {
-    window.location.href = TargetLink[0].href
-  }
-
   // Async function to get people's data from search-api
   const getPeopleFromSearchAPI = async function (needle) {
     var searchURL = 'https://search-api.epfl.ch/api/ldap?q=' + encodeURIComponent(needle) + '&showall=0&hl=en&pageSize=all&siteSearch=people.epfl.ch'
@@ -76,6 +71,14 @@ $(document).ready(async () => {
   // TODO: [ ] handle personnes.epfl.ch too
   if (document.URL.includes('https://people.epfl.ch/')) {
     console.log('Mode: details')
+
+    let adminDataLink = $('a:contains("Administrative data"),a:contains("Données administratives")')
+    if (adminDataLink.length) {
+      adminDataLink[0].click()
+    }
+    // Comfort, open admindata by default
+    unsafeWindow.toggleVis('admin-data')
+
     const users = await getPeopleFromSearchAPI(document.title)
     const user = users[0]
     // console.log(user)
@@ -84,9 +87,6 @@ $(document).ready(async () => {
 
     // Add sciper after name in title
     $('#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1').append(' #' + sciper)
-
-    // Comfort, open admindata by default
-    unsafeWindow.toggleVis('admin-data')
 
     // Create a new div to host specific content of this script
     $('.container:first > div > h1.mr-3').css('margin-bottom', '0px')
