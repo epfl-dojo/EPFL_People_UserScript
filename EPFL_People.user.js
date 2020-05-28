@@ -5,11 +5,11 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.3
+// @version     1.5.5
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
-// @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
+// @downloadURL https://github.com/epfl-dojo/EPFL_People_UserScript/raw/feature/NewPeoplePage/EPFL_People.user.js
 // ==/UserScript==
 
 // TODO: [ ] ask people to Tequila login if not
@@ -18,10 +18,7 @@
 
 $(document).ready(async () => {
 
-  var TargetLink = $("a:contains('Administrative data')")
-  console.log(TargetLink)
-  if (TargetLink.length)
-    window.location.href = TargetLink[0].href
+
 
   // Async function to get people's data from search-api
   const getPeopleFromSearchAPI = async function (needle) {
@@ -59,7 +56,7 @@ $(document).ready(async () => {
     waitForEl('.list-unstyled', async () => {
       console.log('...results found!')
       const q = new URLSearchParams(window.location.search).get('q')
-      users = await getPeopleFromSearchAPI(q)
+      const users = await getPeopleFromSearchAPI(q)
       $('h3[class=h3] > a[class=result]').each(function (index, value) {
         // console.log( index + ': ' + $( this ).attr( 'href' ) )
         $(this).after(' #' + users[index].sciper)
@@ -68,8 +65,12 @@ $(document).ready(async () => {
   }
 
   // In case we are on https://people.epfl.ch/*
-  // TODO: [ ] handle personnes.epfl.ch too
-  if (document.URL.includes('https://people.epfl.ch/')) {
+  if (document.URL.includes('https://people.epfl.ch/') || document.URL.includes('https://personnes.epfl.ch/')) {
+    let targetLink = $("a:contains('Données administratives'), a:contains('Administrative data')")
+
+    if (targetLink.length) {
+      targetLink[0].click()
+    }
     console.log('Mode: details')
     const users = await getPeopleFromSearchAPI(document.title)
     const user = users[0]
