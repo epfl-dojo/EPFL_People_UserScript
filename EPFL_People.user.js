@@ -5,7 +5,7 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.2
+// @version     1.5.3
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
@@ -19,7 +19,7 @@
 $(document).ready(async () => {
 
   var TargetLink = $("a:contains('Administrative data')")
-
+  console.log(TargetLink)
   if (TargetLink.length)
     window.location.href = TargetLink[0].href
 
@@ -30,7 +30,7 @@ $(document).ready(async () => {
       type: 'GET',
       url: people,
       async: true,
-      success: function ( data ) {
+      success: function (data) {
         result = data
       }
     })
