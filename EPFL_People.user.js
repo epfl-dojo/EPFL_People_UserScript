@@ -5,7 +5,7 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.1
+// @version     1.5.2
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
@@ -19,7 +19,7 @@
 $( document ).ready( async () => {
 
   // Async function to get people's data from search-api
-  async function getPeopleFromSearchAPI ( needle ) {
+  const getPeopleFromSearchAPI = async function ( needle ) {
     var people = 'https://search-api.epfl.ch/api/ldap?q=' + needle
     var result = await $.ajax({
       type: 'GET',
@@ -32,20 +32,33 @@ $( document ).ready( async () => {
     return result
   }
 
+  const waitForEl = function ( selector, callback ) {
+    if (jQuery(selector).length) {
+      callback()
+    } else {
+      setTimeout(function() {
+        waitForEl(selector, callback)
+      }, 100)
+    }
+  }
+  
+  
   // In case we are on https://search.epfl.ch/?filter=people&
   if ( document.URL.includes( 'https://search.epfl.ch' ) ) {
     console.log( 'Mode: list' )
-    const q = new URLSearchParams( window.location.search ).get( 'q' )
-    users = await getPeopleFromSearchAPI( q )
-    // console.log(users[0])
-
-    // TODO: [ ] wait for the list to be loaded
+    console.log( 'Waiting for results...' )
+    // TODO: [x] wait for the list to be loaded
     // TODO: [ ] handle pagination if more than 100 results
 
     // Add the sciper number after the people's name
-    $( 'h3[class=h3] > a[class=result]' ).each(function( index, value ) {
-      // console.log( index + ': ' + $( this ).attr( 'href' ) )
-      $( this ).after(' #' + users[index].sciper )
+    waitForEl( '.list-unstyled', async () => {
+      console.log( '...results found!' )
+      const q = new URLSearchParams( window.location.search ).get( 'q' )
+      users = await getPeopleFromSearchAPI( q )
+      $( 'h3[class=h3] > a[class=result]' ).each(function( index, value ) {
+        // console.log( index + ': ' + $( this ).attr( 'href' ) )
+        $( this ).after(' #' + users[index].sciper )
+      })
     })
   } 
 
