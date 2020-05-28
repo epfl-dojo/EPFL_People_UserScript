@@ -1,20 +1,20 @@
 // ==UserScript==
 // @name        EPFL People
-// @namespace   none
+// @version     1.5.4
 // @description A script to improve browsing on people.epfl.ch
+// @author      EPFL-dojo
+// @namespace   EPFL-dojo
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.4
-// @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
-// @author      EPFL-dojo
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
 // ==/UserScript==
 
-// TODO: [ ] ask people to Tequila login if not
 // TODO: [ ] get the groups
 // TODO: [ ] get the mailinglist
+// TODO: [ ] Add a modal with userscript info (https://epfl-si.github.io/elements/#/organisms/modal)
+// TODO: [ ] Add a interactive map of user location (https://www.epfl.ch/campus/services/en/it-services/web-services/wordpress-help/map-en/)
 
 $(document).ready(async () => {
 
