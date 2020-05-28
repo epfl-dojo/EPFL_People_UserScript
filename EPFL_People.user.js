@@ -1,128 +1,101 @@
 // ==UserScript==
 // @name        EPFL People
-// @namespace   none
-// @version     1.3.6
-// @author      EPFL-dojo
+// @version     1.6.0
 // @description A script to improve browsing on people.epfl.ch
+// @author      EPFL-dojo
+// @namespace   EPFL-dojo
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
-// @grant       GM_xmlhttpRequest
-// @grant       GM_addStyle
-// @require     http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
-// @connect     self
-// @run-at      document-end
-// @homepage    https://github.com/ponsfrilus/EPFL_People_UserScript/
-// @homepageURL https://github.com/ponsfrilus/EPFL_People_UserScript/
-// @hwebsite    https://github.com/ponsfrilus/EPFL_People_UserScript/
-// @source      https://github.com/ponsfrilus/EPFL_People_UserScript/
-// @downloadURL https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/EPFL_People.user.js
-// @updateURL   https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/EPFL_People.user.js
-// @supportURL  https://github.com/ponsfrilus/EPFL_People_UserScript/issues
-// @icon        https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
-// @iconURL     https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
-// @defaulticon https://github.com/ponsfrilus/EPFL_People_UserScript/raw/master/img/epfl_search_people.png
+// @include     https://search.epfl.ch/?filter=people&*
+// @require     https://code.jquery.com/jquery-3.5.1.min.js
+// @downloadURL https://raw.githubusercontent.com/ponsfrilus/EPFL_People_UserScript/master/EPFL_People.user.js
 // ==/UserScript==
 
-//Avoid conflicts
-this.$ = this.jQuery = jQuery.noConflict(true);
-$(document).ready(function() {
-  
-  console.log("Userscript EPFL People");
+// TODO: [ ] get the groups
+// TODO: [ ] get the mailinglist
+// TODO: [ ] Add a modal with userscript info (https://epfl-si.github.io/elements/#/organisms/modal)
+// TODO: [ ] Add a interactive map of user location (https://www.epfl.ch/campus/services/en/it-services/web-services/wordpress-help/map-en/)
 
-  /**
-   * FIRST PART: data manipulation with unlogged users
-   **/
-  
-  // Add link for everry part of the unit path
-  // TODO:  add "title" attribute with the full unit name
-  // DEBUG: console.log($('*[itemprop="location"] > *[itemprop="name"]').text());
-  $('*[itemprop="location"] > *[itemprop="name"]').each(function(i, c){
-    var unitPath = '';
-    $(this).text().split(" ").forEach(function(el){
-      if (el) {
-        unitPath = unitPath + '<a href="https://search.epfl.ch/?filter=unit&q=' + el + '">' + el + '</a> ';
+$(document).ready(async () => {
+
+  console.log("%cCoded by EPFL-DOJO","color:#060;font-weight:bold;"),
+  console.log("%cPlease visit https://github.com/epfl-dojo/\nand checkout-out EPFL Userscripts here\nhttps://github.com/search?q=topic:epfl-userscript&type=Repositories\n\nFeel free to contribute (https://github.com/epfl-dojo/EPFL_People_UserScript) and add issues or feature request here\nhttps://github.com/epfl-dojo/EPFL_People_UserScript/issues","color:#08ff00;font-weight:bold;"),
+  console.log("%c	⊂(◉‿◉)つ","font-size:34px; line-height:1.4em;");
+
+  // Async function to get people's data from search-api
+  const getPeopleFromSearchAPI = async function (needle) {
+    var searchURL = 'https://search-api.epfl.ch/api/ldap?q=' + encodeURIComponent(needle) + '&showall=0&hl=en&pageSize=all&siteSearch=people.epfl.ch'
+    var result = await $.ajax({
+      type: 'GET',
+      url: searchURL,
+      async: true,
+      success: function (data) {
+        result = data
       }
-    });
-    $(this).html(unitPath); // setting text
-  });
-  
-  // TODO:  Make the email selectable
-
-  
-  /**
-   * SECOND PART: data manipulation with logged users
-   **/
-  
-  // get user info (this means that you have to be logged in)
-  $.epfl_user = {
-    "name": $(".main-container h1").text(),
-    "username": $('dt:contains("Username"):last').next().text(),
-    "sciper": $('dt:contains("SCIPER Number"):last').next().text(),
-    "shell": $('dt:contains("Shell"):last').next().text()
-  };
-
-  $.epfl_user.rooms = $('a[href*="https://plan.epfl.ch?room="]').map(function() {
-    return this.text;
-  }).toArray();
-
-  $('span.unit-name').each(function(){
-    var that = $(this);
-    var unitName = that.parent().find('a').last().text();
-    GM_xmlhttpRequest({
-      method: "GET",
-      url: "https://search.epfl.ch/ubrowse.action?acro=" + unitName,
-      onload: function(response) {
-        var html = $.parseHTML( response.responseText );
-        var unitHref = $(html).find('a[href*="http://infowww.epfl.ch/imon-public/OrgUnites.detail?ww_i_unite="]').attr('href');
-        var unitId = unitHref.match(/ww_i_unite=([0-9]{4,6})/)[1];
-        that.parent().parent().parent().append("(<a href='" + unitHref + "'>#" + unitId + "</a>)");
-      }
-    });
-  });
-
-  // change the main title content to add the sciper in it
-  $(".main-container h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " ()");
-  $.get("/cgi-bin/people/showcv?id=" + $.epfl_user["sciper"] + "&op=admindata&type=show&lang=en&cvlang=en", function(data){
-    $.epfl_user["username"] = data.match(/Username: (\w+)\s/)[1];
-    $(".main-container h1").text($.epfl_user["name"] + " #" + $.epfl_user["sciper"] + " (" + $.epfl_user["username"]+ ")");
-    $('.presentation').append('Username : ' + $.epfl_user["username"]+'<br />');
-  });
-  $('.presentation').append('Sciper : ' + $.epfl_user["sciper"]+'<br />');
-    
-  function absURL(url, needle, replacement) {
-    return url.replace(needle, replacement);
+    })
+    return result
   }
 
-  // Add user's mailing list in the right column
-  var cadiURL = 'http://cadiwww.epfl.ch/listes?sciper='+$.epfl_user["sciper"];
-  GM_xmlhttpRequest({
-    method: "GET",
-    url: cadiURL,
-    onload: function(response) {
-      html = $.parseHTML( response.responseText );
-      // Mailing list emails
-      mailinglistUL = $(html).contents('ul').not(':last');
-      if (0 < mailinglistUL.length) {
-        $('.right-col').append('<h4>Mailing Lists</h4><div id="cadiMLdiv"><ul id="cadiML">cadiML</ul></div>');
-        $('#cadiML').html(mailinglistUL);
-        // replace cadi's relative URL with absolute URL
-        $('#cadiML a').each(function(){
-          this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
-        });
-      }
-      // Group list emails
-      grouplistUL = $(html).contents('ul').last();
-      if (0 < grouplistUL.length) {
-        $('.right-col').append('<br /><h4>Groups Lists</h4><div id="cadiGLdiv"><ul id="cadiGL">cadiGL</ul></div>');
-        $('#cadiGL').html(grouplistUL);
-        // replace cadi's relative URL with absolute URL
-        $('#cadiGL a').each(function(){
-          this.href = absURL(this.href, window.location.origin, 'http://cadiwww.epfl.ch');
-        });
-      }
+  const waitForEl = function (selector, callback) {
+    if ($(selector).length) {
+      callback()
+    } else {
+      setTimeout(function () {
+        waitForEl(selector, callback)
+      }, 100)
     }
-  });
-  GM_addStyle("#cadiMLdiv{ padding-left: 20px; } #cadiML ul ul { margin-left: 10px; }" );
-  GM_addStyle("#cadiGLdiv{ padding-left: 20px; } #cadiGL ul ul { margin-left: 10px; }" );
-  
+  }
+
+  const updateSearchResultsList = async (q) => {
+    // TODO: [ ] handle pagination if more than 100 results
+    let users = await getPeopleFromSearchAPI(q)
+    waitForEl('.list-unstyled', async () => {
+      $('h3[class=h3] > a[class=result]').each(function(index, value) {
+        // console.log( index + ': ' + $( this ).attr( 'href' ) )
+        $(this).after(' #' + users[index].sciper)
+      })
+    })
+  }
+
+  // In case we are on https://search.epfl.ch/?filter=people&
+  if (document.URL.includes('https://search.epfl.ch')) {
+    console.log('Mode: list')
+    const q = new URLSearchParams(window.location.search).get('q')
+    updateSearchResultsList(q)
+    $('input[name=search]').on('input', (e) => {
+      updateSearchResultsList($('input[name=search]').val())
+    })
+  }
+
+  // In case we are on https://people.epfl.ch/* or https://personnes.epfl.ch/*
+  if (document.URL.includes('https://people.epfl.ch/') || document.URL.includes('https://personnes.epfl.ch/')) {
+    console.log('Mode: details')
+
+    let adminDataLink = $('a:contains("Administrative data"),a:contains("Données administratives")')
+    if (adminDataLink.length) {
+      adminDataLink[0].click()
+    }
+    // Comfort, open admindata by default
+    unsafeWindow.toggleVis('admin-data')
+
+    const users = await getPeopleFromSearchAPI(document.title)
+    const user = users[0]
+    // console.log(user)
+    const sciper = user.sciper
+    const username = $('dt:contains("Username")').next('dd').html()
+
+    // Add sciper after name in title
+    $('#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1').append(' #' + sciper)
+
+    // Create a new div to host specific content of this script
+    $('.container:first > div > h1.mr-3').css('margin-bottom', '0px')
+    $('<div class="d-flex flex-wrap justify-content-between align-items-baseline" id="EPFLPeopleUserScriptData"></div>').insertAfter('.container:first div:first')
+    $('#EPFLPeopleUserScriptData').css('font-family', 'monospace')
+    $('#EPFLPeopleUserScriptData').css('white-space', 'pre')
+    $('#EPFLPeopleUserScriptData').append('<div>sciper: ' + sciper + '</div>')
+    $('#EPFLPeopleUserScriptData').append('<div>username: ' + username + '</div>')
+    $('#EPFLPeopleUserScriptData').append('<div>email: ' + user.email + '</div>')
+    $('#EPFLPeopleUserScriptData').append('<div>unit: ' + user.accreds[0].path + '</div>')
+  }
+
 });
