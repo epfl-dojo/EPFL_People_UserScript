@@ -18,10 +18,10 @@
 
 $(document).ready(async () => {
 
-  var TargetLink = $("a:contains('Administrative data')")
-
-  if (TargetLink.length)
+  var TargetLink = $('a:contains("Administrative data")')
+  if (TargetLink.length) {
     window.location.href = TargetLink[0].href
+  }
 
   // Async function to get people's data from search-api
   const getPeopleFromSearchAPI = async function (needle) {
