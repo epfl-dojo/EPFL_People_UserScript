@@ -5,11 +5,8 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.4.0
-// @grant       GM_xmlhttpRequest
+// @version     1.5.0
 // @grant       GM_addStyle
-// @grant       GM.setValue
-// @grant       GM.getValue
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
 // @downloadURL https://raw.githubusercontent.com/epfl-dojo/EPFL_People_UserScript/master/EPFL_People.user.js
@@ -22,42 +19,41 @@
 // TODO: [ ] get the mailinglist
 // TODO: [x] add proper meta data on the phone number
 
-$( document ).ready( async function () {
+$( document ).ready( async () => {
 
-  async function getInfoFromPeopleAPI( needle ) {
-    var people = 'https://search-api.epfl.ch/api/ldap?q=' + needle;
-    GM_xmlhttpRequest({
-      method: 'GET',
+  // Async function to get people's data from search-api
+  async function getPeopleFromSearchAPI ( needle ) {
+    var people = 'https://search-api.epfl.ch/api/ldap?q=' + needle
+    var result = await $.ajax({
+      type: "GET",
       url: people,
-      onload: async function( response ) {
-        html = $.parseJSON( response.responseText )
-        // console.log(html)
-        await GM.setValue( 'searchAPIData', html )
+      async: true,
+      success: function ( data ) {
+        result = data
       }
-    })
+    });
+    return result
   }
-  
+
   // In case we are on https://search.epfl.ch/?filter=people&
   if ( document.URL.includes( 'https://search.epfl.ch' ) ) {
     console.log( 'Mode: list' )
-    const urlParams = new URLSearchParams( window.location.search )
-    const q = urlParams.get( 'q' )
-    await getInfoFromPeopleAPI( q )
-    const users = await GM.getValue( 'searchAPIData' )
-    // console.log(users)
-    $( 'a[class=result]' ).each(function( index, value ) {
-      //console.log( index + ': ' + $( this ).attr( 'href' ) )
+    const q = new URLSearchParams( window.location.search ).get( 'q' )
+    users = await getPeopleFromSearchAPI( q )
+    // console.log(users[0])
+    // Add the sciper number after the people's name
+    $( 'h3[class=h3] > a[class=result]' ).each(function( index, value ) {
+      // console.log( index + ': ' + $( this ).attr( 'href' ) )
       $( this ).after(' #' + users[index].sciper )
     })
   } 
 
+  // In case we are on https://people.epfl.ch/*
   if ( document.URL.includes( 'https://people.epfl.ch/' ) ) {
     console.log( 'Mode: defails' )
-    await getInfoFromPeopleAPI( document.title )
-    const users = await GM.getValue( 'searchAPIData' )
+    const users = await getPeopleFromSearchAPI( document.title )
     const user = users[0]
     // console.log(user)
-
     const sciper   = user.sciper
     const username = $( 'dt:contains("Username")' ).next( 'dd' ).html()
 
