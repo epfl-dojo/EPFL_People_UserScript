@@ -5,7 +5,7 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.2
+// @version     1.5.3
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
@@ -17,6 +17,10 @@
 // TODO: [ ] get the mailinglist
 
 $(document).ready(async () => {
+
+  console.log("%cCoded by EPFL-DOJO","color:#060;font-weight:bold;"),
+  console.log("%cPlease visit https://github.com/epfl-dojo/\nand checkout-out EPFL Userscripts here\nhttps://github.com/search?q=topic:epfl-userscript&type=Repositories\n\nFeel free to contribute (https://github.com/epfl-dojo/EPFL_People_UserScript) and add issues or feature request here\nhttps://github.com/epfl-dojo/EPFL_People_UserScript/issues","color:#08ff00;font-weight:bold;"),
+  console.log("%c	⊂(◉‿◉)つ","font-size:34px; line-height:1.4em;");
 
   var TargetLink = $('a:contains("Administrative data")')
   if (TargetLink.length) {
