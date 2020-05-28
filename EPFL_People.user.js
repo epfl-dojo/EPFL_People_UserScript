@@ -51,23 +51,24 @@ $(document).ready(async () => {
     }
   }
 
+  const updateSearchResultsList = async (q) => {
+    // TODO: [ ] handle pagination if more than 100 results
+    let users = await getPeopleFromSearchAPI(q)
+    waitForEl('.list-unstyled', async () => {
+      $('h3[class=h3] > a[class=result]').each(function(index, value) {
+        // console.log( index + ': ' + $( this ).attr( 'href' ) )
+        $(this).after(' #' + users[index].sciper)
+      })
+    })
+  }
 
   // In case we are on https://search.epfl.ch/?filter=people&
   if (document.URL.includes('https://search.epfl.ch')) {
     console.log('Mode: list')
-    console.log('Waiting for results...')
-    // TODO: [x] wait for the list to be loaded
-    // TODO: [ ] handle pagination if more than 100 results
-
-    // Add the sciper number after the people's name
-    waitForEl('.list-unstyled', async () => {
-      console.log('...results found!')
-      const q = new URLSearchParams(window.location.search).get('q')
-      users = await getPeopleFromSearchAPI(q)
-      $('h3[class=h3] > a[class=result]').each(function (index, value) {
-        // console.log( index + ': ' + $( this ).attr( 'href' ) )
-        $(this).after(' #' + users[index].sciper)
-      })
+    const q = new URLSearchParams(window.location.search).get('q')
+    updateSearchResultsList(q)
+    $('input[name=search]').on('input', (e) => {
+      updateSearchResultsList($('input[name=search]').val())
     })
   }
 
