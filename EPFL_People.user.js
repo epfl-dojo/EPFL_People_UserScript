@@ -5,7 +5,7 @@
 // @include     https://people.epfl.ch/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
-// @version     1.5.0
+// @version     1.5.1
 // @grant       GM_addStyle
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
 // @author      EPFL-dojo
@@ -13,11 +13,8 @@
 // ==/UserScript==
 
 // TODO: [ ] ask people to Tequila login if not
-// TODO: [x] improve the sciper query if people are logged in
-// TODO: [x] get the username
 // TODO: [ ] get the groups
 // TODO: [ ] get the mailinglist
-// TODO: [x] add proper meta data on the phone number
 
 $( document ).ready( async () => {
 
@@ -25,13 +22,13 @@ $( document ).ready( async () => {
   async function getPeopleFromSearchAPI ( needle ) {
     var people = 'https://search-api.epfl.ch/api/ldap?q=' + needle
     var result = await $.ajax({
-      type: "GET",
+      type: 'GET',
       url: people,
       async: true,
       success: function ( data ) {
         result = data
       }
-    });
+    })
     return result
   }
 
@@ -41,6 +38,10 @@ $( document ).ready( async () => {
     const q = new URLSearchParams( window.location.search ).get( 'q' )
     users = await getPeopleFromSearchAPI( q )
     // console.log(users[0])
+
+    // TODO: [ ] wait for the list to be loaded
+    // TODO: [ ] handle pagination if more than 100 results
+
     // Add the sciper number after the people's name
     $( 'h3[class=h3] > a[class=result]' ).each(function( index, value ) {
       // console.log( index + ': ' + $( this ).attr( 'href' ) )
@@ -49,8 +50,9 @@ $( document ).ready( async () => {
   } 
 
   // In case we are on https://people.epfl.ch/*
+  // TODO: [ ] handle personnes.epfl.ch too
   if ( document.URL.includes( 'https://people.epfl.ch/' ) ) {
-    console.log( 'Mode: defails' )
+    console.log( 'Mode: details' )
     const users = await getPeopleFromSearchAPI( document.title )
     const user = users[0]
     // console.log(user)
