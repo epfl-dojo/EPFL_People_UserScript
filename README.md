@@ -1,6 +1,14 @@
 # EPFL People UserScript
+<!-- TOC titleSize:2 tabSpaces:3 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:1 title:0 charForUnorderedList:* -->
+* [Installation](#installation)
+* [Features](#features)
+   * [On search.epfl.ch](#on-searchepflch)
+   * [On people.epfl.ch](#on-peopleepflch)
+* [Example](#example)
+<!-- /TOC -->
 
 A user script to improve browsing on [search.epfl.ch] and [people.epfl.ch].
+
 
 ## Installation
 
@@ -22,6 +30,11 @@ A user script to improve browsing on [search.epfl.ch] and [people.epfl.ch].
    * Auto-load the login page if not logged
    * Toggle the admin data information
    * Display information such as sciper, username, email and unit just below the person's name
+
+
+## Example
+
+![Kermit_profil](./img/Kermit_profil.png)
 
 
 [search.epfl.ch]: https://search.epfl.ch
