@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.6.0
+// @version     1.6.1
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
@@ -47,14 +47,41 @@ $(document).ready(async () => {
   }
 
   const updateSearchResultsList = async (q) => {
-    // TODO: [ ] handle pagination if more than 100 results
+    // Query search-api for users
     let users = await getPeopleFromSearchAPI(q)
-    waitForEl('.list-unstyled', async () => {
-      $('h3[class=h3] > a[class=result]').each(function(index, value) {
-        // console.log( index + ': ' + $( this ).attr( 'href' ) )
-        $(this).after(' #' + users[index].sciper)
+    // In case we get some users
+    if (typeof users !== 'undefined') {
+      // Wait for the results element with class '.list-unstyled'
+      waitForEl('.list-unstyled', async () => {
+        // For each results
+        $('h3[class=h3] > a[class=result]').each(function(index, value) {
+          // Find the email (not all users have one, but for now it's the quickest way to get a unique identifier)
+          let usrEmail = $(this).parents('div[class=result]').find('a').last().html()
+          // Lookup in users which entry match this email
+          let usrObj = users.find(el => el.email === usrEmail)
+          // If nothing found, process the next element
+          if (typeof usrObj === 'undefined') {
+            return
+          }
+          // Have this user already have the span class sciperID (This can happen when using the search input)
+          let spanSciper = $(this).parents('h3').find('.sciperID')
+          if (spanSciper.length) {
+            // Found the span, replace the content
+            spanSciper.html('#' + usrObj.sciper)
+          } else {
+            // Span not found, insert it
+            $(this).after(' <span class="sciperID">#' + usrObj.sciper + ' </span>')
+          }
+        })
       })
-    })
+    } else {
+      // Insert the span class sciperID for the next search
+      waitForEl('.list-unstyled', async () => {
+        $('h3[class=h3] > a[class=result]').each(function(index, value) {
+            $(this).after(' <span class="sciperID"></span>')
+        })
+      })
+    }
   }
 
   // In case we are on https://search.epfl.ch/?filter=people&
