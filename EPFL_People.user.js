@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.6.1
+// @version     1.6.2
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
@@ -105,7 +105,8 @@ $(document).ready(async () => {
     // Comfort, open admindata by default
     unsafeWindow.toggleVis('admin-data')
 
-    const users = await getPeopleFromSearchAPI(document.title)
+    const name = document.title.match('(.*) — ');
+    const users = await getPeopleFromSearchAPI(name[1])
     const user = users[0]
     // console.log(user)
     const sciper = user.sciper
