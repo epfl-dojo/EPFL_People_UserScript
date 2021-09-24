@@ -105,7 +105,9 @@ $(document).ready(async () => {
     // Comfort, open admindata by default
     unsafeWindow.toggleVis('admin-data')
 
-    const users = await getPeopleFromSearchAPI(document.title)
+
+    const name = document.title.match('(.*) — ');
+    const users = await getPeopleFromSearchAPI(name[1])
     const user = users[0]
     // console.log(user)
     const sciper = user.sciper
