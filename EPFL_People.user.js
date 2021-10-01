@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.6.2
+// @version     1.6.3
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
@@ -124,6 +124,13 @@ $(document).ready(async () => {
     $('#EPFLPeopleUserScriptData').append('<div>username: ' + username + '</div>')
     $('#EPFLPeopleUserScriptData').append('<div>email: ' + user.email + '</div>')
     $('#EPFLPeopleUserScriptData').append('<div>unit: ' + user.accreds[0].path + '</div>')
+    for (accred in user.accreds) {
+      if (user.accreds[accred].officeList.length) {
+        for (office of user.accreds[accred].officeList) {
+          $('#collapse-0').append(`<div><iframe id="userScript${accred}" height="350px" width="100%" src="https://plan.epfl.ch/iframe/?room==${office}&map_zoom=10"></iframe></div>`)
+        }
+      }
+    }
   }
 
 });
