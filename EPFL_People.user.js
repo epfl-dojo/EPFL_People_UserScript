@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.6.4
+// @version     1.7.0
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
@@ -14,7 +14,6 @@
 // TODO: [ ] get the groups
 // TODO: [ ] get the mailinglist
 // TODO: [ ] Add a modal with userscript info (https://epfl-si.github.io/elements/#/organisms/modal)
-// TODO: [ ] Add a interactive map of user location (https://www.epfl.ch/campus/services/en/it-services/web-services/wordpress-help/map-en/)
 
 $(document).ready(async () => {
 
@@ -105,15 +104,21 @@ $(document).ready(async () => {
     // Comfort, open admindata by default
     unsafeWindow.toggleVis('admin-data')
 
-    const name = document.title.match('(.*) — ');
-    const users = await getPeopleFromSearchAPI(name[1])
+    const name = $('h1#name').text()
+    const sex = ($('h1#name').attr('class').includes('pnf')) ? '♀' : '♂'
+    const users = await getPeopleFromSearchAPI(name)
+    if (users.length != 1) {
+      console.error(`⚠ Watchout: ${((users.length > 1) ? 'more than one user' : 'no user')} found!`)
+    }
     const user = users[0]
-    // console.log(user)
+    // console.debug(user)
     const sciper = user.sciper
     const username = $('dt:contains("Username")').next('dd').html()
 
-    // Add sciper after name in title
-    $('#main > div.container > div.d-flex.flex-wrap.justify-content-between.align-items-baseline > h1').append(' #' + sciper)
+    // Modify the main title adding sex and sciper
+    $('h1#name').text((i,ori) => {
+      return `${sex} ${ori} #${sciper}`
+    })
 
     // Create a new div to host specific content of this script
     $('.container:first > div > h1.mr-3').css('margin-bottom', '0px')
