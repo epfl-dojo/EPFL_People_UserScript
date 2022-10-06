@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.7.0
+// @version     1.8.0
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
@@ -48,6 +48,7 @@ $(document).ready(async () => {
   const updateSearchResultsList = async (q) => {
     // Query search-api for users
     let users = await getPeopleFromSearchAPI(q)
+    console.log(users)
     // In case we get some users
     if (typeof users !== 'undefined') {
       // Wait for the results element with class '.list-unstyled'
@@ -71,13 +72,19 @@ $(document).ready(async () => {
             // Span not found, insert it
             $(this).after(' <span class="sciperID">#' + usrObj.sciper + ' </span>')
           }
+
+          let userPictureUrl = `https://people.epfl.ch/private/common/photos/links/${usrObj.sciper}.jpg?ts=${Date.now()}`
+          let imageElement = `<img id="pic${usrObj.sciper}" class="userPic" alt="" src="${userPictureUrl}" style="width:100%;max-width:37px" />`
+          $(this).parents('h3').html((i,ori) => {
+            return `${imageElement} ${ori}`
+          })
         })
       })
     } else {
       // Insert the span class sciperID for the next search
       waitForEl('.list-unstyled', async () => {
         $('h3[class=h3] > a[class=result]').each(function(index, value) {
-            $(this).after(' <span class="sciperID"></span>')
+          $(this).after(' <span class="sciperID"></span>')
         })
       })
     }
@@ -87,6 +94,7 @@ $(document).ready(async () => {
   if (document.URL.includes('https://search.epfl.ch')) {
     console.log('Mode: list')
     const q = new URLSearchParams(window.location.search).get('q')
+    console.debug("Looking for", q)
     updateSearchResultsList(q)
     $('input[name=search]').on('input', (e) => {
       updateSearchResultsList($('input[name=search]').val())
