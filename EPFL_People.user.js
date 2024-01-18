@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name        EPFL People
-// @version     1.8.0
+// @version     1.9.0
 // @description A script to improve browsing on people.epfl.ch
 // @author      EPFL-dojo
 // @namespace   EPFL-dojo
 // @include     https://people.epfl.ch/*
+// @exclude     https://people.epfl.ch/signatures/*
 // @include     https://personnes.epfl.ch/*
 // @include     https://search.epfl.ch/?filter=people&*
 // @require     https://code.jquery.com/jquery-3.5.1.min.js
